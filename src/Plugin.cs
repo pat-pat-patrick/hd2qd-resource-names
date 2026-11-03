@@ -36,19 +36,24 @@ namespace Hd2Qd.ResourceNames
             box.Children.Add(repo);
 
             var state = new TextBlock { Margin = new Thickness(0, 12, 0, 0), TextWrapping = TextWrapping.Wrap };
+            // a list fetched by 1.0.0 has no game archive names: said, rather than "0 game archive
+            // names" (the user, 2026-11-03), and the button fetches them
             void ShowHere()
             {
                 var here = Names.Here(home);
+                int archives = Names.ArchivesHere(home);
                 state.Text = here == null ? Words.Get(lang, "none")
-                    : Words.F(lang, "have", here.Value.Count.ToString("N0"), here.Value.When.ToString("yyyy-MM-dd HH:mm"), Names.ArchivesHere(home).ToString("N0"));
-                state.Foreground = Brush(here == null ? "Muted" : "Ink");
+                    : archives == 0 ? Words.F(lang, "have_names_only", here.Value.Count.ToString("N0"), here.Value.When.ToString("yyyy-MM-dd HH:mm"))
+                    : Words.F(lang, "have", here.Value.Count.ToString("N0"), here.Value.When.ToString("yyyy-MM-dd HH:mm"), archives.ToString("N0"));
+                state.Foreground = Brush(here == null ? "Muted" : archives == 0 ? "Yellow" : "Ink");
             }
+            string ButtonWords() => Words.Get(lang, Names.Here(home) == null ? "fetch" : Names.ArchivesHere(home) == 0 ? "fetch_archives" : "fetch_again");
             ShowHere();
             box.Children.Add(state);
 
             var fetch = new Button
             {
-                Content = Words.Get(lang, Names.Here(home) == null ? "fetch" : "fetch_again"),
+                Content = ButtonWords(),
                 Style = Application.Current?.TryFindResource("Primary") as Style, MinHeight = 44, Padding = new Thickness(16, 0, 16, 0),
                 HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 12, 0, 0),
             };
@@ -64,13 +69,13 @@ namespace Hd2Qd.ResourceNames
                     (host.TryGetValue("refresh", out var r) ? r as Action : null)?.Invoke();
                 }
                 catch (Exception x) when (x is System.Net.Http.HttpRequestException || x is System.Threading.Tasks.TaskCanceledException ||
-                                          x is System.IO.IOException || x is UnauthorizedAccessException)
+                                          x is System.IO.IOException || x is UnauthorizedAccessException || x is System.IO.InvalidDataException)
                 {
                     (host.TryGetValue("tell", out var t) ? t as Action<string> : null)?.Invoke(Words.F(lang, "failed", x.Message));
                 }
                 ShowHere();
                 fetch.IsEnabled = true;
-                fetch.Content = Words.Get(lang, Names.Here(home) == null ? "fetch" : "fetch_again");
+                fetch.Content = ButtonWords();
             };
             box.Children.Add(fetch);
             return box;

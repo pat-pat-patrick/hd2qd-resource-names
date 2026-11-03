@@ -4,8 +4,10 @@
   "source": "The lists are compiled by the HD2SDK community. This plugin does not include them; the button below downloads the resource names and the game archive names directly from HD2SDK's repository:",
   "none": "The name list has not been downloaded.",
   "have": "{0} resource names and {2} game archive names, downloaded {1}.",
+  "have_names_only": "{0} resource names, downloaded {1}; the game archive names have not been downloaded.",
   "fetch": "Download the name list",
   "fetch_again": "Download again",
+  "fetch_archives": "Download the game archive names",
   "fetching": "Downloading…",
   "fetched": "Resource name list downloaded: {0} names",
   "failed": "The name list could not be downloaded: {0}"
