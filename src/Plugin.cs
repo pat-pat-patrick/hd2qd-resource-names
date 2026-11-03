@@ -40,7 +40,7 @@ namespace Hd2Qd.ResourceNames
             {
                 var here = Names.Here(home);
                 state.Text = here == null ? Words.Get(lang, "none")
-                    : Words.F(lang, "have", here.Value.Count.ToString("N0"), here.Value.When.ToString("yyyy-MM-dd HH:mm"));
+                    : Words.F(lang, "have", here.Value.Count.ToString("N0"), here.Value.When.ToString("yyyy-MM-dd HH:mm"), Names.ArchivesHere(home).ToString("N0"));
                 state.Foreground = Brush(here == null ? "Muted" : "Ink");
             }
             ShowHere();

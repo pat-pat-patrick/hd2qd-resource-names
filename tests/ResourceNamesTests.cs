@@ -16,6 +16,7 @@ namespace Hd2Qd.ResourceNames.Tests
         readonly string home = Path.Combine(Path.GetTempPath(), "hd2qd-resource-names-" + Guid.NewGuid().ToString("N"));
         readonly HttpListener server = new HttpListener();
         string body;
+        string archives = Archives(150);
         readonly int port = 8800 + new Random().Next(900);
 
         public ResourceNamesTests()
@@ -30,7 +31,7 @@ namespace Hd2Qd.ResourceNames.Tests
                     HttpListenerContext c;
                     try { c = server.GetContext(); }
                     catch (HttpListenerException) { return; }
-                    var bytes = Encoding.UTF8.GetBytes(body ?? "");
+                    var bytes = Encoding.UTF8.GetBytes((c.Request.Url.AbsolutePath.EndsWith("archivehashes.json") ? archives : body) ?? "");
                     c.Response.OutputStream.Write(bytes, 0, bytes.Length);
                     c.Response.Close();
                 }
@@ -45,6 +46,8 @@ namespace Hd2Qd.ResourceNames.Tests
             try { Directory.Delete(home, true); } catch (IOException) { }
         }
 
+        static string Archives(int n) => "{\"Armor\": {" + string.Join(", ", Enumerable.Range(1, n).Select(i => "\"" + (0x1000 + i).ToString("x16") + "\": \"Set " + i + "\"")) + "}}";
+
         static string List(int n) => string.Join("\n", Enumerable.Range(1, n).Select(i => (1000 + i) + " content/thing_" + i)) + "\n";
 
         [Fact]
@@ -56,6 +59,21 @@ namespace Hd2Qd.ResourceNames.Tests
             Assert.Equal(150, Names.Here(home).Value.Count);
             Assert.Equal(Path.Combine(home, "resource_names", "friendlynames.txt"), Names.File(home));
             Assert.StartsWith("1001 content/thing_1", File.ReadAllText(Names.File(home)));
+            Assert.Equal(150, Names.ArchivesHere(home));
+        }
+
+        /// <summary>The archives' names come with the list; a download of them that is not that
+        /// file refuses the whole fetch, and what is here stays.</summary>
+        [Fact]
+        public void The_archive_names_come_with_it_and_are_checked()
+        {
+            body = List(150);
+            archives = "<html>not found</html>";
+            Assert.Throws<InvalidDataException>(() => Names.Fetch(home).GetAwaiter().GetResult());
+            Assert.Null(Names.Here(home));
+            archives = Archives(150);
+            Names.Fetch(home).GetAwaiter().GetResult();
+            Assert.Equal(150, Names.ArchivesHere(home));
         }
 
         [Fact]

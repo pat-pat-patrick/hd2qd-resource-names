@@ -1,9 +1,9 @@
 {
   "title": "Resource names",
-  "summary": "Downloads the resource name list from HD2SDK's repository, so conflicts name resources instead of giving their numbers.",
-  "source": "The list is compiled by the HD2SDK community. This plugin does not include it; the button below downloads it directly from HD2SDK's repository:",
+  "summary": "Downloads the resource and game archive name lists from HD2SDK's repository, so conflicts and the asset check name resources instead of giving their numbers.",
+  "source": "The lists are compiled by the HD2SDK community. This plugin does not include them; the button below downloads the resource names and the game archive names directly from HD2SDK's repository:",
   "none": "The name list has not been downloaded.",
-  "have": "{0} names, downloaded {1}.",
+  "have": "{0} resource names and {2} game archive names, downloaded {1}.",
   "fetch": "Download the name list",
   "fetch_again": "Download again",
   "fetching": "Downloading…",
