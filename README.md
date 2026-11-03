@@ -1,15 +1,16 @@
 # HD2QD Resource Names
 
 A plugin of [HD2 Mod Quick Deploy](https://github.com/pat-pat-patrick/hd2-mod-cli). With one
-button, it downloads the resource name list of
+button, it downloads two lists of
 [HD2SDK Community Edition](https://github.com/Boxofbiscuits97/HD2SDK-CommunityEdition) from that
-repository. The manager's conflicts then name each resource (for example "Helmet O-3 Free Spirit")
-instead of giving its number.
+repository: the resource names, and the names of the game's archives. The manager's conflicts and
+the Asset check plugin then name each resource (for example "Helmet O-3 Free Spirit", or the game
+item it belongs to: "Armor: SR-24 Street Scout") instead of giving its number.
 
-- The list is compiled by the HD2SDK community. This plugin does not include it: each player
-  downloads it from HD2SDK's own repository.
-- The list goes into the manager's settings folder (`resource_names\friendlynames.txt`), where the
-  manager reads it. Nothing else is changed.
+- The lists are compiled by the HD2SDK community. This plugin does not include them: each player
+  downloads them from HD2SDK's own repository.
+- The lists go into the manager's settings folder (`resource_names\friendlynames.txt` and
+  `resource_names\archivehashes.json`), where the manager reads them. Nothing else is changed.
 
 ## Use
 
