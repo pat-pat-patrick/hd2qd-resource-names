@@ -1,0 +1,12 @@
+{
+  "title": "Resource names",
+  "summary": "Downloads the resource name list from HD2SDK's repository, so conflicts name resources instead of giving their numbers.",
+  "source": "The list is compiled by the HD2SDK community. This plugin does not include it; the button below downloads it directly from HD2SDK's repository:",
+  "none": "The name list has not been downloaded.",
+  "have": "{0} names, downloaded {1}.",
+  "fetch": "Download the name list",
+  "fetch_again": "Download again",
+  "fetching": "Downloading…",
+  "fetched": "Resource name list downloaded: {0} names",
+  "failed": "The name list could not be downloaded: {0}"
+}
